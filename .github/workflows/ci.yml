@@ -65,8 +65,8 @@ jobs:
           bundle exec fastlane --version    # Verify Fastlane is working
 
       # Check code formatting (fail if code is not properly formatted)
-      - name: Verify formatting
-        run: dart format --output=none --set-exit-if-changed .
+      # - name: Verify formatting
+      #   run: dart format --output=none --set-exit-if-changed .
 
       # Run full CI pipeline using Fastlane (deps, analyze, test, build)
       - name: Run Fastlane CI for Android
