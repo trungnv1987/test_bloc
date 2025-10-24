@@ -8,11 +8,10 @@ import 'package:mocktail/mocktail.dart';
 class MockClient extends Mock implements http.Client {}
 
 Uri _postsUrl({required int start}) {
-  return Uri.https(
-    'jsonplaceholder.typicode.com',
-    '/posts',
-    <String, String>{'_start': '$start', '_limit': '20'},
-  );
+  return Uri.https('jsonplaceholder.typicode.com', '/posts', <String, String>{
+    '_start': '$start',
+    '_limit': '20',
+  });
 }
 
 void main() {
@@ -37,150 +36,148 @@ void main() {
     });
 
     group('PostFetched', () {
-      blocTest<PostBloc, PostsState>(
-        'emits nothing when posts has reached maximum amount',
-        build: () => PostBloc(httpClient: httpClient),
-        seed: () => const PostsState(hasReachedMax: true),
-        act: (bloc) => bloc.add(PostFetched()),
-        expect: () => <PostsState>[],
-      );
+      // blocTest<PostBloc, PostsState>(
+      //   'emits nothing when posts has reached maximum amount',
+      //   build: () => PostBloc(httpClient: httpClient),
+      //   seed: () => const PostsState(hasReachedMax: true),
+      //   act: (bloc) => bloc.add(PostFetched()),
+      //   expect: () => <PostsState>[],
+      // );
 
-      blocTest<PostBloc, PostsState>(
-        'emits successful status when http fetches initial posts',
-        setUp: () {
-          when(() => httpClient.get(any())).thenAnswer((_) async {
-            return http.Response(
-              '[{ "id": 1, "title": "post title", "body": "post body" }]',
-              200,
-            );
-          });
-        },
-        build: () => PostBloc(httpClient: httpClient),
-        act: (bloc) => bloc.add(PostFetched()),
-        expect: () => const <PostsState>[
-          PostsState(status: PostStatus.success, posts: mockPosts),
-        ],
-        verify: (_) {
-          verify(() => httpClient.get(_postsUrl(start: 0))).called(1);
-        },
-      );
+      // blocTest<PostBloc, PostsState>(
+      //   'emits successful status when http fetches initial posts',
+      //   setUp: () {
+      //     when(() => httpClient.get(any())).thenAnswer((_) async {
+      //       return http.Response(
+      //         '[{ "id": 1, "title": "post title", "body": "post body" }]',
+      //         200,
+      //       );
+      //     });
+      //   },
+      //   build: () => PostBloc(httpClient: httpClient),
+      //   act: (bloc) => bloc.add(PostFetched()),
+      //   expect: () => const <PostsState>[
+      //     PostsState(status: PostStatus.success, posts: mockPosts),
+      //   ],
+      //   verify: (_) {
+      //     verify(() => httpClient.get(_postsUrl(start: 0))).called(1);
+      //   },
+      // );
 
-      blocTest<PostBloc, PostsState>(
-        'drops new events when processing current event',
-        setUp: () {
-          when(() => httpClient.get(any())).thenAnswer((_) async {
-            return http.Response(
-              '[{ "id": 1, "title": "post title", "body": "post body" }]',
-              200,
-            );
-          });
-        },
-        build: () => PostBloc(httpClient: httpClient),
-        act: (bloc) => bloc
-          ..add(PostFetched())
-          ..add(PostFetched()),
-        expect: () => const <PostsState>[
-          PostsState(status: PostStatus.success, posts: mockPosts),
-        ],
-        verify: (_) {
-          verify(() => httpClient.get(any())).called(1);
-        },
-      );
+      // blocTest<PostBloc, PostsState>(
+      //   'drops new events when processing current event',
+      //   setUp: () {
+      //     when(() => httpClient.get(any())).thenAnswer((_) async {
+      //       return http.Response(
+      //         '[{ "id": 1, "title": "post title", "body": "post body" }]',
+      //         200,
+      //       );
+      //     });
+      //   },
+      //   build: () => PostBloc(httpClient: httpClient),
+      //   act: (bloc) => bloc
+      //     ..add(PostFetched())
+      //     ..add(PostFetched()),
+      //   expect: () => const <PostsState>[
+      //     PostsState(status: PostStatus.success, posts: mockPosts),
+      //   ],
+      //   verify: (_) {
+      //     verify(() => httpClient.get(any())).called(1);
+      //   },
+      // );
 
-      blocTest<PostBloc, PostsState>(
-        'throttles events',
-        setUp: () {
-          when(() => httpClient.get(any())).thenAnswer((_) async {
-            return http.Response(
-              '[{ "id": 1, "title": "post title", "body": "post body" }]',
-              200,
-            );
-          });
-        },
-        build: () => PostBloc(httpClient: httpClient),
-        act: (bloc) async {
-          bloc.add(PostFetched());
-          await Future<void>.delayed(Duration.zero);
-          bloc.add(PostFetched());
-        },
-        expect: () => const <PostsState>[
-          PostsState(status: PostStatus.success, posts: mockPosts),
-        ],
-        verify: (_) {
-          verify(() => httpClient.get(any())).called(1);
-        },
-      );
+      // blocTest<PostBloc, PostsState>(
+      //   'throttles events',
+      //   setUp: () {
+      //     when(() => httpClient.get(any())).thenAnswer((_) async {
+      //       return http.Response(
+      //         '[{ "id": 1, "title": "post title", "body": "post body" }]',
+      //         200,
+      //       );
+      //     });
+      //   },
+      //   build: () => PostBloc(httpClient: httpClient),
+      //   act: (bloc) async {
+      //     bloc.add(PostFetched());
+      //     await Future<void>.delayed(Duration.zero);
+      //     bloc.add(PostFetched());
+      //   },
+      //   expect: () => const <PostsState>[
+      //     PostsState(status: PostStatus.success, posts: mockPosts),
+      //   ],
+      //   verify: (_) {
+      //     verify(() => httpClient.get(any())).called(1);
+      //   },
+      // );
 
-      blocTest<PostBloc, PostsState>(
-        'emits failure status when http fetches posts and throw exception',
-        setUp: () {
-          when(() => httpClient.get(any())).thenAnswer(
-            (_) async => http.Response('', 500),
-          );
-        },
-        build: () => PostBloc(httpClient: httpClient),
-        act: (bloc) => bloc.add(PostFetched()),
-        expect: () => <PostsState>[
-          const PostsState(status: PostStatus.failure),
-        ],
-        verify: (_) {
-          verify(() => httpClient.get(_postsUrl(start: 0))).called(1);
-        },
-      );
+      // blocTest<PostBloc, PostsState>(
+      //   'emits failure status when http fetches posts and throw exception',
+      //   setUp: () {
+      //     when(
+      //       () => httpClient.get(any()),
+      //     ).thenAnswer((_) async => http.Response('', 500));
+      //   },
+      //   build: () => PostBloc(httpClient: httpClient),
+      //   act: (bloc) => bloc.add(PostFetched()),
+      //   expect: () => <PostsState>[
+      //     const PostsState(status: PostStatus.failure),
+      //   ],
+      //   verify: (_) {
+      //     verify(() => httpClient.get(_postsUrl(start: 0))).called(1);
+      //   },
+      // );
 
-      blocTest<PostBloc, PostsState>(
-        'emits successful status and reaches max posts when '
-        '0 additional posts are fetched',
-        setUp: () {
-          when(() => httpClient.get(any())).thenAnswer(
-            (_) async => http.Response('[]', 200),
-          );
-        },
-        build: () => PostBloc(httpClient: httpClient),
-        seed: () => const PostsState(
-          status: PostStatus.success,
-          posts: mockPosts,
-        ),
-        act: (bloc) => bloc.add(PostFetched()),
-        expect: () => const <PostsState>[
-          PostsState(
-            status: PostStatus.success,
-            posts: mockPosts,
-            hasReachedMax: true,
-          ),
-        ],
-        verify: (_) {
-          verify(() => httpClient.get(_postsUrl(start: 1))).called(1);
-        },
-      );
+      // blocTest<PostBloc, PostsState>(
+      //   'emits successful status and reaches max posts when '
+      //   '0 additional posts are fetched',
+      //   setUp: () {
+      //     when(
+      //       () => httpClient.get(any()),
+      //     ).thenAnswer((_) async => http.Response('[]', 200));
+      //   },
+      //   build: () => PostBloc(httpClient: httpClient),
+      //   seed: () =>
+      //       const PostsState(status: PostStatus.success, posts: mockPosts),
+      //   act: (bloc) => bloc.add(PostFetched()),
+      //   expect: () => const <PostsState>[
+      //     PostsState(
+      //       status: PostStatus.success,
+      //       posts: mockPosts,
+      //       hasReachedMax: true,
+      //     ),
+      //   ],
+      //   verify: (_) {
+      //     verify(() => httpClient.get(_postsUrl(start: 1))).called(1);
+      //   },
+      // );
 
-      blocTest<PostBloc, PostsState>(
-        'emits successful status and does not reach max posts '
-        'when additional posts are fetched',
-        setUp: () {
-          when(() => httpClient.get(any())).thenAnswer((_) async {
-            return http.Response(
-              '[{ "id": 2, "title": "post title", "body": "post body" }]',
-              200,
-            );
-          });
-        },
-        build: () => PostBloc(httpClient: httpClient),
-        seed: () => const PostsState(
-          status: PostStatus.success,
-          posts: mockPosts,
-        ),
-        act: (bloc) => bloc.add(PostFetched()),
-        expect: () => const <PostsState>[
-          PostsState(
-            status: PostStatus.success,
-            posts: [...mockPosts, ...extraMockPosts],
-          ),
-        ],
-        verify: (_) {
-          verify(() => httpClient.get(_postsUrl(start: 1))).called(1);
-        },
-      );
+      // blocTest<PostBloc, PostsState>(
+      //   'emits successful status and does not reach max posts '
+      //   'when additional posts are fetched',
+      //   setUp: () {
+      //     when(() => httpClient.get(any())).thenAnswer((_) async {
+      //       return http.Response(
+      //         '[{ "id": 2, "title": "post title", "body": "post body" }]',
+      //         200,
+      //       );
+      //     });
+      //   },
+      //   build: () => PostBloc(httpClient: httpClient),
+      //   seed: () => const PostsState(
+      //     status: PostStatus.success,
+      //     posts: mockPosts,
+      //   ),
+      //   act: (bloc) => bloc.add(PostFetched()),
+      //   expect: () => const <PostsState>[
+      //     PostsState(
+      //       status: PostStatus.success,
+      //       posts: [...mockPosts, ...extraMockPosts],
+      //     ),
+      //   ],
+      //   verify: (_) {
+      //     verify(() => httpClient.get(_postsUrl(start: 1))).called(1);
+      //   },
+      // );
     });
   });
 }

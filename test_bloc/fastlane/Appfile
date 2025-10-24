@@ -1,0 +1,24 @@
+# The Appfile is a configuration file for fastlane. It's usually placed in the root of the project.
+# It contains information about your app that can be shared across all fastlane lanes.
+# If you want to get a list of all available options run `fastlane docs`
+
+# The name of your app. Used for the app identifier and other places.
+app_identifier("com.example.flutter_infinite_list")
+
+# The display name of your app
+app_name("Flutter Infinite List")
+
+# Your Apple Developer Portal username
+# apple_id("user@example.com")
+
+# Your Apple Developer Portal Team ID
+# team_id("XXXXXXXXXX")
+
+# Your Google Play Console service account email
+# google_play_service_account_email("service-account@example.iam.gserviceaccount.com")
+
+# Your Google Play Console service account JSON key file path
+# google_play_service_account_json_key_path("path/to/service-account.json")
+
+# Your Google Play Console package name
+# package_name("com.example.flutter_infinite_list")

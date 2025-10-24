@@ -10,7 +10,7 @@ void main() {
     testWidgets('renders PostDetailView', (tester) async {
       await tester.pumpWidget(const App()); // Sử dụng App widget có GoRouter
       // Đợi widget được render
-      // await tester.pump();
+      await tester.pump();
       // Đợi tất cả animation và timer hoàn thành với timeout
       await tester.pumpAndSettle(const Duration(seconds: 5));
       // Kiểm tra xem PostsList có tồn tại không trước khi tap
