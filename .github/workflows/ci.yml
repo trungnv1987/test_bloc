@@ -64,13 +64,25 @@ jobs:
           bundle install                    # Install Ruby gems from Gemfile
           bundle exec fastlane --version    # Verify Fastlane is working
 
+      # Verify Android project structure
+      - name: Verify Android project
+        run: |
+          echo "Current directory: $(pwd)"
+          echo "Android directory contents:"
+          ls -la android/
+          echo "Checking gradlew:"
+          ls -la android/gradlew
+          chmod +x android/gradlew
+
       # Check code formatting (fail if code is not properly formatted)
       # - name: Verify formatting
       #   run: dart format --output=none --set-exit-if-changed .
 
       # Run full CI pipeline using Fastlane (deps, analyze, test, build)
       - name: Run Fastlane CI for Android
-        run: bundle exec fastlane android ci
+        run: |
+          cd fastlane
+          bundle exec fastlane android ci
 
       # Upload test coverage to Codecov for analysis
       - name: Upload coverage to Codecov
@@ -177,7 +189,9 @@ jobs:
 
       # Run full CI pipeline for iOS (deps, analyze, test, build)
       - name: Build iOS with Fastlane
-        run: bundle exec fastlane ios ci
+        run: |
+          cd fastlane
+          bundle exec fastlane ios ci
 
       # Upload iOS app bundle as build artifact
       - name: Upload iOS artifact
