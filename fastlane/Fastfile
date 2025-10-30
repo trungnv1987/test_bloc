@@ -13,92 +13,22 @@
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
 
-default_platform(:android)
-
-platform :android do
-  desc "Build and test Android app"
-  lane :test do
-    gradle(
-      task: "test",
-      project_dir: File.expand_path("../android", __dir__)
-    )
-  end
-
-  desc "Build Android APK"
-  lane :build_apk do
-    gradle(
-      task: "assembleRelease",
-      project_dir: File.expand_path("../android", __dir__)
-    )
-  end
-
-  desc "Build Android AAB"
-  lane :build_aab do
-    gradle(
-      task: "bundleRelease",
-      project_dir: File.expand_path("../android", __dir__)
-    )
-  end
-
-  desc "Run Flutter tests"
-  lane :flutter_test do
-    sh("cd .. && flutter test --coverage")
-  end
-
-  desc "Run Flutter analyze"
-  lane :flutter_analyze do
-    begin
-      sh("cd .. && flutter analyze --no-fatal-infos")
-    rescue => ex
-      UI.message("Flutter analyze completed with warnings: #{ex.message}")
-    end
-  end
-
-  desc "Get Flutter dependencies"
-  lane :flutter_deps do
-    sh("cd .. && flutter pub get")
-  end
-
-  desc "Full CI pipeline for Android"
-  lane :ci do
-    flutter_deps
-    flutter_analyze
-    flutter_test
-    build_apk
-    build_aab
-  end
-end
+# default_platform(:ios)
 
 platform :ios do
-  desc "Build iOS app"
-  lane :build_ios do
-    sh("cd .. && flutter build ios --release --no-codesign")
-  end
-
-  desc "Run Flutter tests"
-  lane :flutter_test do
-    sh("cd .. && flutter test --coverage")
-  end
-
-  desc "Run Flutter analyze"
-  lane :flutter_analyze do
-    begin
-      sh("cd .. && flutter analyze --no-fatal-infos")
-    rescue => ex
-      UI.message("Flutter analyze completed with warnings: #{ex.message}")
-    end
-  end
-
-  desc "Get Flutter dependencies"
-  lane :flutter_deps do
-    sh("cd .. && flutter pub get")
-  end
-
-  desc "Full CI pipeline for iOS"
-  lane :ci do
-    flutter_deps
-    flutter_analyze
-    flutter_test
-    build_ios
+  desc "Description of what the lane does"
+  lane :build_dev do
+    match(
+      type: "development",
+      readonly: true,          # pull only, don't modify      
+    )
+    build_app(
+      scheme: "Runner",
+      workspace: "ios/Runner.xcworkspace",
+      include_bitcode: true,
+      export_method: "development",
+      output_directory: "./build/ios",
+      output_name: "debug.ipa",
+    )
   end
 end

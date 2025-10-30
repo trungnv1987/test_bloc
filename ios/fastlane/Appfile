@@ -1,7 +1,7 @@
 
-app_name("Flutter Infinite List")
-app_identifier("trung.flutter-bloc") # The bundle identifier of your app
-apple_id("trunghome2908@gmail.com") # Your Apple Developer Portal username
+# app_name("Flutter Infinite List")
+# app_identifier("trung.flutter-bloc") # The bundle identifier of your app
+# apple_id("trunghome2908@gmail.com") # Your Apple Developer Portal username
 
 
 # For more information about the Appfile, see:

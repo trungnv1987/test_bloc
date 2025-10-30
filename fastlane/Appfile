@@ -3,16 +3,13 @@
 # If you want to get a list of all available options run `fastlane docs`
 
 # The name of your app. Used for the app identifier and other places.
-# app_identifier("com.example.flutter_infinite_list")
-
+app_identifier("trung.flutter-bloc")
 # The display name of your app
-# app_name("Flutter Infinite List")
-
+app_name("Flutter Infinite List")
 # Your Apple Developer Portal username
-# apple_id("user@example.com")
-
+apple_id("trunghome2908@gmail.com")
 # Your Apple Developer Portal Team ID
-# team_id("XXXXXXXXXX")
+team_id("8RV6CLR42P")
 
 # Your Google Play Console service account email
 # google_play_service_account_email("service-account@example.iam.gserviceaccount.com")
