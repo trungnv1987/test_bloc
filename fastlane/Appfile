@@ -3,10 +3,10 @@
 # If you want to get a list of all available options run `fastlane docs`
 
 # The name of your app. Used for the app identifier and other places.
-app_identifier("com.example.flutter_infinite_list")
+# app_identifier("com.example.flutter_infinite_list")
 
 # The display name of your app
-app_name("Flutter Infinite List")
+# app_name("Flutter Infinite List")
 
 # Your Apple Developer Portal username
 # apple_id("user@example.com")
