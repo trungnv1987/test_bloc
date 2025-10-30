@@ -15,6 +15,9 @@ on:
         required: false
         default: "3.35.4"
 
+env:
+  FLUTTER_VERSION: "3.35.4" # Default Flutter version (can be overridden via workflow input)
+
 jobs:
   build-ios-dev:
     name: build-ios-dev
@@ -26,14 +29,20 @@ jobs:
         uses: styfle/cancel-workflow-action@0.12.1
         with:
           access_token: ${{ github.token }}
+
       # Checkout the repository code
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Set Flutter version from environment if input is empty
-      - name: Set Flutter version from environment
-        if: ${{ inputs.flutter_version == '' }}
-        run: echo "FLUTTER_VERSION=${{ env.FLUTTER_VERSION }}" >> $GITHUB_ENV
+      # Determine Flutter version: prefer manual input, fallback to env default
+
+      # Setup Flutter SDK
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ inputs.flutter_version != '' && inputs.flutter_version || env.FLUTTER_VERSION }}
+          channel: "stable"
+          cache: true
 
       # Setup Ruby for Fastlane
       - name: Setup Ruby
@@ -42,23 +51,13 @@ jobs:
           ruby-version: "3.3"
           bundler-cache: true
 
-      # Setup Flutter SDK
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ env.FLUTTER_VERSION }} # Use Flutter version from environment
-          channel: "stable"
-          cache: true
-
-      # Install Fastlane dependencies
-      - name: Install Fastlane
-        run: bundle install
+      # Fastlane gems are installed and cached by ruby/setup-ruby (bundler-cache: true)
 
       # Run full CI pipeline for iOS (deps, analyze, test, build)
       - name: Build iOS dev with Fastlane
         run: |
           cd ios
-          fastlane build_dev
+          bundle exec fastlane build_dev
 
       # Upload iOS app bundle as build artifact
       # - name: Upload iOS artifact
