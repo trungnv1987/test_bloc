@@ -21,6 +21,7 @@ env:
 jobs:
   build-ios-dev:
     name: build-ios-dev
+    environment: dev
     runs-on: macos-latest # iOS builds require macOS runner
     # needs: test # Only run after test job passes
 
@@ -86,6 +87,9 @@ jobs:
       # Run full CI pipeline for iOS (deps, analyze, test, build)
       - name: Build iOS dev with Fastlane
         run: bundle exec fastlane ios build_dev
+        env:
+          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
 
       # Upload iOS app bundle as build artifact
       # - name: Upload iOS artifact
