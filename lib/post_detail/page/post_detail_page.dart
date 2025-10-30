@@ -8,7 +8,6 @@ import 'package:flutter_infinite_list/post_detail/usecases/get_post_detail_useca
 
 final class PostDetailPage extends StatefulWidget {
   final int postId;
-
   const PostDetailPage({super.key, required this.postId});
 
   @override

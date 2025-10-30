@@ -1,25 +1,23 @@
-import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_infinite_list/posts/bloc/post_bloc.dart';
-import 'package:flutter_infinite_list/posts/models/post.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
 
 class MockClient extends Mock implements http.Client {}
 
-Uri _postsUrl({required int start}) {
-  return Uri.https('jsonplaceholder.typicode.com', '/posts', <String, String>{
-    '_start': '$start',
-    '_limit': '20',
-  });
-}
+// Uri _postsUrl({required int start}) {
+//   return Uri.https('jsonplaceholder.typicode.com', '/posts', <String, String>{
+//     '_start': '$start',
+//     '_limit': '20',
+//   });
+// }
 
 void main() {
   group('PostBloc', () {
-    const mockPosts = [Post(id: 1, title: 'post title', body: 'post body')];
-    const extraMockPosts = [
-      Post(id: 2, title: 'post title', body: 'post body'),
-    ];
+    // const mockPosts = [Post(id: 1, title: 'post title', body: 'post body')];
+    // const extraMockPosts = [
+    //   Post(id: 2, title: 'post title', body: 'post body'),
+    // ];
 
     late http.Client httpClient;
 

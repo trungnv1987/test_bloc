@@ -9,6 +9,7 @@ environment:
 dependencies:
   leak_tracker:
   bloc: ^9.0.0
+  provider: 
   bloc_concurrency: ^0.3.0
   equatable: ^2.0.0
   flutter:

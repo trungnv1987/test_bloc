@@ -3,7 +3,6 @@ import 'package:flutter_infinite_list/post_detail/bloc/post_detail_bloc.dart';
 import 'package:flutter_infinite_list/post_detail/bloc/post_detail_event.dart';
 import 'package:flutter_infinite_list/post_detail/bloc/post_detail_state.dart';
 import 'package:flutter_infinite_list/post_detail/usecases/get_post_detail_usecase.dart';
-import 'package:flutter_infinite_list/posts/models/post.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../repo/post_detail_repo_mock.dart';
