@@ -85,7 +85,8 @@ jobs:
 
       # Run full CI pipeline for iOS (deps, analyze, test, build)
       - name: Build iOS dev with Fastlane
-        run: bundle exec fastlane --fastfile ios/fastlane/Fastfile build_dev
+        working-directory: ios
+        run: bundle exec fastlane build_dev
 
       # Upload iOS app bundle as build artifact
       # - name: Upload iOS artifact
