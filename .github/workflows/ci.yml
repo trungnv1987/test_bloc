@@ -86,12 +86,16 @@ jobs:
 
       # Run full CI pipeline for iOS (deps, analyze, test, build)
       - name: Build iOS dev with Fastlane
-        run: bundle exec fastlane ios build_dev
         env:
           CERT_PASSWORD: ${{ secrets.CERT_PASSWORD }}
           MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           MATCH_KEYCHAIN_PASSWORD: ${{ secrets.MATCH_KEYCHAIN_PASSWORD }}
+
+        run: bundle exec fastlane ios build_dev
+
+      - name: Log keychain error
+        run: security find-identity -v -p codesigning /Users/runner/Library/Keychains/fastlane_tmp_keychain-db
 
       # Upload iOS app bundle as build artifact
       # - name: Upload iOS artifact
