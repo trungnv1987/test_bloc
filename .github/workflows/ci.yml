@@ -88,6 +88,7 @@ jobs:
       - name: Build iOS dev with Fastlane
         run: bundle exec fastlane ios build_dev
         env:
+          CERT_PASSWORD: ${{ secrets.CERT_PASSWORD }}
           MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
 
