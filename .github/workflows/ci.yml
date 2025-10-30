@@ -54,7 +54,7 @@ jobs:
       - name: Build iOS dev with Fastlane
         run: |
           cd ios
-          bundle exec fastlane build_dev
+          fastlane build_dev
 
       # Upload iOS app bundle as build artifact
       # - name: Upload iOS artifact
