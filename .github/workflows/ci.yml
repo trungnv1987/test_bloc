@@ -22,6 +22,10 @@ jobs:
     # needs: test # Only run after test job passes
 
     steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.12.1
+        with:
+          access_token: ${{ github.token }}
       # Checkout the repository code
       - name: Checkout repository
         uses: actions/checkout@v4
