@@ -36,13 +36,43 @@ jobs:
 
       # Determine Flutter version: prefer manual input, fallback to env default
 
-      # Setup Flutter SDK
-      - name: Setup Flutter
+      - name: Restore Flutter SDK cache
+        id: flutter_sdk_cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            ~/hostedtoolcache/flutter
+          key: ${{ runner.os }}-flutter-sdk-${{ env.FLUTTER_VERSION }}-${{ runner.arch }}
+
+      # 2) Install Flutter ONLY if cache missed
+      - name: Setup Flutter (cold cache)
+        if: steps.flutter_sdk_cache.outputs.cache-hit != 'true'
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: ${{ inputs.flutter_version != '' && inputs.flutter_version || env.FLUTTER_VERSION }}
-          channel: "stable"
-          cache: true
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: false # we’re managing cache manually here
+
+      # 3) Save SDK to cache for next runs (only when it was a miss)
+      - name: Save Flutter SDK cache
+        if: steps.flutter_sdk_cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            ~/hostedtoolcache/flutter
+          key: ${{ steps.flutter_sdk_cache.outputs.cache-primary-key }}
+
+      # 4) Cache pub + build artifacts (optional but recommended)
+      - name: Cache pub & build
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            **/.dart_tool
+            **/build
+          key: ${{ runner.os }}-pub-${{ env.FLUTTER_VERSION }}-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-${{ env.FLUTTER_VERSION }}-
 
       # Setup Ruby for Fastlane
       - name: Setup Ruby
@@ -55,9 +85,7 @@ jobs:
 
       # Run full CI pipeline for iOS (deps, analyze, test, build)
       - name: Build iOS dev with Fastlane
-        run: |
-          cd ios
-          bundle exec fastlane build_dev
+        run: bundle exec fastlane --fastfile ios/fastlane/Fastfile build_dev
 
       # Upload iOS app bundle as build artifact
       # - name: Upload iOS artifact
