@@ -22,6 +22,8 @@ platform :ios do
     match(
       type: "development",
       readonly: true,          # pull only, don't modify      
+      git_branch: "master", # <-- Use the actual branch name you want
+      shallow_clone:true,
     )
     build_app(
       scheme: "Runner",

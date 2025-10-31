@@ -95,7 +95,10 @@ jobs:
         run: bundle exec fastlane ios build_dev
 
       - name: Log keychain error
-        run: security find-identity -v -p codesigning /Users/runner/Library/Keychains/fastlane_tmp_keychain-db
+        run: |
+          # The command you want to execute
+          security find-identity -v -p codesigning /Users/runner/Library/Keychains/fastlane_tmp_keychain-db
+          # Note: The path /Users/runner/Library/... is the common location on GitHub-hosted macOS runners.
 
       # Upload iOS app bundle as build artifact
       # - name: Upload iOS artifact
